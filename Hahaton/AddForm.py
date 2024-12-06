@@ -22,7 +22,7 @@ class Ui_AddForm(object):
         self.cancelButton.setGeometry(QtCore.QRect(230, 260, 75, 23))
         self.cancelButton.setObjectName("cancelButton")
         self.label = QtWidgets.QLabel(AddForm)
-        self.label.setGeometry(QtCore.QRect(140, 20, 121, 21))
+        self.label.setGeometry(QtCore.QRect(140, 20, 141, 21))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.label.setFont(font)
