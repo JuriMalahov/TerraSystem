@@ -26,6 +26,12 @@ class Ui_CollectedMaterials(object):
         font.setPointSize(14)
         self.label.setFont(font)
         self.label.setObjectName("label")
+        self.redButton = QtWidgets.QPushButton(self.centralwidget)
+        self.redButton.setGeometry(QtCore.QRect(420, 410, 101, 23))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.redButton.setFont(font)
+        self.redButton.setObjectName("redButton")
         CollectedMaterials.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(CollectedMaterials)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 960, 21))
@@ -40,5 +46,6 @@ class Ui_CollectedMaterials(object):
 
     def retranslateUi(self, CollectedMaterials):
         _translate = QtCore.QCoreApplication.translate
-        CollectedMaterials.setWindowTitle(_translate("CollectedMaterials", "CollectedMaterials"))
+        CollectedMaterials.setWindowTitle(_translate("CollectedMaterials", "Собранные материалы"))
         self.label.setText(_translate("CollectedMaterials", "Список добытых материалов"))
+        self.redButton.setText(_translate("CollectedMaterials", "Редактировать"))
