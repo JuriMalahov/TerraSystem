@@ -132,7 +132,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Масса руды (кг):</string>
+    <string>Масса руды (т):</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -158,7 +158,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Масса чистого урана (кг):</string>
+    <string>Масса чистого урана (г):</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

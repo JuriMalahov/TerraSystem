@@ -76,6 +76,6 @@ class Ui_AddForm(object):
         self.label.setText(_translate("AddForm", "Введите данные"))
         self.label_2.setText(_translate("AddForm", "Тип урана:"))
         self.label_3.setText(_translate("AddForm", "Точка сбора:"))
-        self.label_4.setText(_translate("AddForm", "Масса руды (кг):"))
-        self.label_5.setText(_translate("AddForm", "Масса чистого урана (кг):"))
+        self.label_4.setText(_translate("AddForm", "Масса руды (т):"))
+        self.label_5.setText(_translate("AddForm", "Масса чистого урана (г):"))
         self.label_6.setText(_translate("AddForm", "Дата добычи:"))

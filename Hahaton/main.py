@@ -9,15 +9,11 @@ from AddForm import Ui_AddForm
 from Redaction import Ui_Redaction
 from DelForm import Ui_DelForm
 from SelNote import Ui_SelNote
+from GraphForm import Ui_GraphForm
+from graph import show_graph
 
 database = sqlite3.connect('db')
 db_cursor = database.cursor()
-
-# pyuic5 CollectedMaterials.ui -o CollectedMaterials.py
-# pyuic5 AddForm.ui -o AddForm.py
-# pyuic5 Redaction.ui -o Redaction.py
-# pyuic5 DelForm.ui -o DelForm.py
-# pyuic5 SelNote.ui -o SelNote.py
 
 
 class TableModel(QtCore.QAbstractTableModel):
@@ -61,6 +57,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_CollectedMaterials):
         self.tableView.verticalHeader().setVisible(False)
         self.redButton.clicked.connect(self.open_red_w)
         self.exportButton.clicked.connect(self.export)
+        self.graphButton.clicked.connect(self.create_graph)
 
     def open_red_w(self):
         self.red_w = Redaction()
@@ -78,9 +75,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_CollectedMaterials):
         df = pd.read_sql(query, database)
         df.to_excel('Данные о добыче урана.xlsx')
 
+    def create_graph(self):
+        self.gform = GraphForm()
+
 
 class AddForm(QtWidgets.QWidget, Ui_AddForm):
-    def __init__(self, notenum=0, date=0, utype=0, place=0, umass=0, mass=0, is_redaction=False):
+    def __init__(self, notenum=0, date=0, utype=0, place=0, mass=0, umass=0, is_redaction=False):
         super(AddForm, self).__init__()
         self.setupUi(self)
         self.setWindowModality(QtCore.Qt.ApplicationModal)
@@ -97,13 +97,13 @@ class AddForm(QtWidgets.QWidget, Ui_AddForm):
             self.dateEdit.setText(date)
             self.typeEdit.setText(utype)
             self.placeEdit.setText(place)
-            self.umassEdit.setText(str(umass))
             self.massEdit.setText(str(mass))
+            self.umassEdit.setText(str(umass))
 
     def commit_note(self):
         if self.is_redaction:
             rep_data = [self.notenum, self.dateEdit.text(), self.typeEdit.text(), self.placeEdit.text(),
-                        self.umassEdit.text(), self.massEdit.text()]
+                        self.massEdit.text(), self.umassEdit.text()]
             db_cursor.execute('REPLACE INTO table1 VALUES (?, ?, ?, ?, ?, ?)', rep_data)
         else:
             try:
@@ -111,7 +111,7 @@ class AddForm(QtWidgets.QWidget, Ui_AddForm):
             except:
                 id_num = 0
             add_data = [id_num, self.dateEdit.text(), self.typeEdit.text(), self.placeEdit.text(),
-                        self.umassEdit.text(), self.massEdit.text()]
+                        self.massEdit.text(), self.umassEdit.text()]
             db_cursor.execute('INSERT INTO table1 VALUES (?, ?, ?, ?, ?, ?)', add_data)
         database.commit()
         window.table_load()
@@ -168,6 +168,21 @@ class SelNote(QtWidgets.QWidget, Ui_SelNote):
         seldata = db_cursor.execute('SELECT * FROM table1 WHERE "Номер записи" = ' +
                                     str(self.lineNum.text())).fetchall()[0]
         self.form = AddForm(seldata[0], seldata[1], seldata[2], seldata[3], seldata[4], seldata[5], True)
+        self.close()
+
+
+class GraphForm(QtWidgets.QWidget, Ui_GraphForm):
+    def __init__(self):
+        super(GraphForm, self).__init__()
+        self.setupUi(self)
+        self.setWindowModality(QtCore.Qt.ApplicationModal)
+        self.show()
+        self.graph1Button.clicked.connect(self.create_graph)
+        self.cancelButton.clicked.connect(self.close)
+
+    def create_graph(self):
+        umass_list = db_cursor.execute('SELECT "Масса чистого урана (г)" FROM table1').fetchall()
+        show_graph(umass_list)
         self.close()
 
 
