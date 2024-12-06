@@ -15,6 +15,6 @@ pip install -r requirements.txt
 
 ## Запуск
 
-'''bash
+```bash
 Python3 main.py
-'''
+```
