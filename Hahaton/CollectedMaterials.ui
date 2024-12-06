@@ -17,10 +17,10 @@
    <widget class="QTableView" name="tableView">
     <property name="geometry">
      <rect>
-      <x>220</x>
+      <x>140</x>
       <y>90</y>
-      <width>500</width>
-      <height>300</height>
+      <width>661</width>
+      <height>321</height>
      </rect>
     </property>
    </widget>
@@ -45,15 +45,15 @@
    <widget class="QPushButton" name="redButton">
     <property name="geometry">
      <rect>
-      <x>420</x>
-      <y>410</y>
-      <width>101</width>
-      <height>23</height>
+      <x>400</x>
+      <y>430</y>
+      <width>141</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>8</pointsize>
+      <pointsize>12</pointsize>
      </font>
     </property>
     <property name="text">

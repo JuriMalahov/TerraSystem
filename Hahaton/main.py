@@ -12,16 +12,7 @@ from SelNote import Ui_SelNote
 
 database = sqlite3.connect('db')
 db_cursor = database.cursor()
-#db_cursor.execute('INSERT INTO table1 VALUES (3, 1, "abc", 123)')
-#cmdata = db_cursor.execute('SELECT * FROM table1').fetchall()
-#database.commit()
-# print(db_cursor.execute('SELECT * FROM table1').fetchall()[1][2])
-#try:
-#    print(db_cursor.execute('SELECT * FROM table1 ORDER BY "Номер записи" DESC LIMIT 1').fetchall()[0][0])
 
-#except:
-#    print(0)
-# print(db_cursor.execute('SELECT * FROM table1').fetchall())
 # pyuic5 CollectedMaterials.ui -o CollectedMaterials.py
 # pyuic5 AddForm.ui -o AddForm.py
 # pyuic5 Redaction.ui -o Redaction.py
@@ -65,7 +56,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_CollectedMaterials):
         self.tableView.setColumnWidth(0, 110)
         self.tableView.setColumnWidth(1, 110)
         self.tableView.setColumnWidth(2, 110)
-        self.tableView.setColumnWidth(3, 149)
+        self.tableView.setColumnWidth(3, 110)
+        self.tableView.setColumnWidth(4, 110)
         self.tableView.verticalHeader().setVisible(False)
         self.redButton.clicked.connect(self.open_red_w)
 
@@ -75,13 +67,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_CollectedMaterials):
     def table_load(self):
         cmdata = db_cursor.execute('SELECT * FROM table1').fetchall()
         data = pd.DataFrame(cmdata,
-                            columns=['Номер записи', 'Тип урана', 'Точка сбора', 'Масса собранного \nматериала (кг)'])
+                            columns=['Номер записи', 'Дата добычи', 'Тип урана', 'Точка сбора',
+                                     'Масса руды (т)', 'Масса чистого\nурана (г)'])
         self.model = TableModel(data)
         self.tableView.setModel(self.model)
 
 
 class AddForm(QtWidgets.QWidget, Ui_AddForm):
-    def __init__(self, notenum=0, utype=0, place=0, mass=0, is_redaction=False):
+    def __init__(self, notenum=0, date=0, utype=0, place=0, umass=0, mass=0, is_redaction=False):
         super(AddForm, self).__init__()
         self.setupUi(self)
         self.setWindowModality(QtCore.Qt.ApplicationModal)
@@ -95,22 +88,25 @@ class AddForm(QtWidgets.QWidget, Ui_AddForm):
             _translate = QtCore.QCoreApplication.translate
             self.setWindowTitle(_translate("AddForm", "Форма изменения"))
             self.label.setText(_translate("AddForm", "Измените данные"))
+            self.dateEdit.setText(date)
             self.typeEdit.setText(utype)
             self.placeEdit.setText(place)
+            self.umassEdit.setText(str(umass))
             self.massEdit.setText(str(mass))
 
     def commit_note(self):
         if self.is_redaction:
-            rep_data = [self.notenum, self.typeEdit.text(), self.placeEdit.text(), self.massEdit.text()]
-            db_cursor.execute('REPLACE INTO table1 VALUES (?, ?, ?, ?)', rep_data)
+            rep_data = [self.notenum, self.dateEdit.text(), self.typeEdit.text(), self.placeEdit.text(),
+                        self.umassEdit.text(), self.massEdit.text()]
+            db_cursor.execute('REPLACE INTO table1 VALUES (?, ?, ?, ?, ?, ?)', rep_data)
         else:
             try:
                 id_num = db_cursor.execute('SELECT * FROM table1 ORDER BY "Номер записи" DESC LIMIT 1').fetchall()[0][0] + 1
             except:
                 id_num = 0
-
-            add_data = [id_num, self.typeEdit.text(), self.placeEdit.text(), self.massEdit.text()]
-            db_cursor.execute('INSERT INTO table1 VALUES (?, ?, ?, ?)', add_data)
+            add_data = [id_num, self.dateEdit.text(), self.typeEdit.text(), self.placeEdit.text(),
+                        self.umassEdit.text(), self.massEdit.text()]
+            db_cursor.execute('INSERT INTO table1 VALUES (?, ?, ?, ?, ?, ?)', add_data)
         database.commit()
         window.table_load()
         self.close()
@@ -163,8 +159,9 @@ class SelNote(QtWidgets.QWidget, Ui_SelNote):
         self.cancelButton.clicked.connect(self.close)
 
     def redact_form(self):
-        seldata = db_cursor.execute('SELECT * FROM table1 WHERE "Номер записи" = '+str(self.lineNum.text())).fetchall()[0]
-        self.form = AddForm(seldata[0], seldata[1], seldata[2], seldata[3], True)
+        seldata = db_cursor.execute('SELECT * FROM table1 WHERE "Номер записи" = ' +
+                                    str(self.lineNum.text())).fetchall()[0]
+        self.form = AddForm(seldata[0], seldata[1], seldata[2], seldata[3], seldata[4], seldata[5], True)
         self.close()
 
 
