@@ -45,7 +45,7 @@
    <widget class="QPushButton" name="redButton">
     <property name="geometry">
      <rect>
-      <x>400</x>
+      <x>290</x>
       <y>430</y>
       <width>141</width>
       <height>41</height>
@@ -58,6 +58,24 @@
     </property>
     <property name="text">
      <string>Редактировать</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="exportButton">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>430</y>
+      <width>141</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Экспорт в Excel</string>
     </property>
    </widget>
   </widget>
