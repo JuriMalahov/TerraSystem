@@ -1,4 +1,3 @@
-import PyQt5
 from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtCore import Qt
 import sys
@@ -60,6 +59,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_CollectedMaterials):
         self.tableView.setColumnWidth(4, 110)
         self.tableView.verticalHeader().setVisible(False)
         self.redButton.clicked.connect(self.open_red_w)
+        self.exportButton.clicked.connect(self.export)
 
     def open_red_w(self):
         self.red_w = Redaction()
@@ -71,6 +71,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_CollectedMaterials):
                                      'Масса руды (т)', 'Масса чистого\nурана (г)'])
         self.model = TableModel(data)
         self.tableView.setModel(self.model)
+
+    def export(self):
+        query = 'SELECT * FROM table1'
+        df = pd.read_sql(query, database)
+        df.to_excel('Данные о добыче урана.xlsx')
 
 
 class AddForm(QtWidgets.QWidget, Ui_AddForm):
