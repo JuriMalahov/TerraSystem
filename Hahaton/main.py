@@ -3,6 +3,7 @@ from PyQt5.QtCore import Qt
 import sys
 import sqlite3
 import pandas as pd
+import openpyxl
 from CollectedMaterials import Ui_CollectedMaterials
 from AddForm import Ui_AddForm
 from Redaction import Ui_Redaction
